@@ -41,7 +41,5 @@ func Server(port uint16) {
 
 	slog.Debug(g.String())
 
-	select {
-	case <-make(chan struct{}): // Block forever
-	}
+	select {}
 }
