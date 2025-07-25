@@ -97,7 +97,7 @@ func (g *Game) addClient(conn net.Conn) {
 
 	g.clients[c.id] = c
 
-	go g.HandleClientMessages(c)
+	go g.handleClientMessages(c)
 }
 
 func (g *Game) initMap() error {
@@ -123,10 +123,9 @@ func (g *Game) Start(addr string) error {
 	slog.Info("Server started on " + addr)
 
 	g.serverLn = ln
-	g.boxMessageChan = make(chan dataMessage, 100)
 
 	go g.handleConnection()
-	go g.HandleSendMessages()
+	go g.handleSendMessages()
 
 	return nil
 }
@@ -135,21 +134,20 @@ func (g Game) String() string {
 	return fmt.Sprintf("maps: %+v", g.maps)
 }
 
-func (g *Game) HandleClientMessages(c *client) {
+func (g *Game) handleClientMessages(c *client) {
 	for {
-
 		buf := make([]byte, 4096)
 		n, err := c.conn.Read(buf)
 		if err != nil {
 			if errors.Is(err, net.ErrClosed) {
-				slog.Info("connection closed", "clientID", c.id, "address", c.conn.RemoteAddr().String())
+				slog.Debug(c.Label()+" Closed connection", "name", c.name, "id", c.id, "address", c.conn.RemoteAddr().String())
 			} else if errors.Is(err, io.EOF) {
-				slog.Info("EOF reached, closing connection", "clientID", c.id, "address", c.conn.RemoteAddr().String())
+				slog.Debug(c.Label()+" EOF reached, closing connection", "name", c.name, "id", c.id, "address", c.conn.RemoteAddr().String())
 			} else {
-				slog.Error("Error reading from connection", "clientID", c.id, "address", c.conn.RemoteAddr().String(), "error", err)
+				slog.Error(c.Label()+" Error reading from connection", "name", c.name, "id", c.id, "address", c.conn.RemoteAddr().String(), "error", err)
 			}
 
-			g.DisconnectClient(c)
+			g.disconnectClient(c)
 			c.conn.Close()
 			return
 		}
@@ -165,10 +163,10 @@ func (g *Game) HandleClientMessages(c *client) {
 			continue
 		}
 
-		slog.Debug("Received", "message", f.String(), "from", c.conn.RemoteAddr().String(), "raw", fmt.Sprintf("%x", raw))
+		slog.Debug(c.Label(), "fd", len(raw), "message", f.String(), "from", c.conn.RemoteAddr().String(), "raw", fmt.Sprintf("% 02x", raw))
 		switch payload := f.IPayload.(type) {
 		case *frames.ClientHello:
-			slog.Info("Client Hello", "client", payload.String())
+			slog.Info(c.Label(), "id", c.id, "joined", payload.String())
 
 			c.y = payload.Y()
 			c.x = payload.X()
@@ -189,7 +187,7 @@ func (g *Game) HandleClientMessages(c *client) {
 			}
 
 		case *frames.ClientPosition:
-			slog.Info("Client Position", "client", c.id, "position", payload.String())
+			slog.Info(c.Label(), "id", c.id, "name", c.name, "pos", "("+payload.String()+")")
 
 			c.x = payload.X()
 			c.y = payload.Y()
@@ -205,7 +203,7 @@ func (g *Game) HandleClientMessages(c *client) {
 			}
 
 		case *frames.ClientMessage:
-			slog.Info("Client Message", "client", c.id, "message", payload.String())
+			slog.Info(c.Label(), "id", c.id, "name", c.name, "said", payload.String())
 
 			frame, err := frames.New(c.id, payload).MarshalBinary()
 			if err != nil {
@@ -218,13 +216,13 @@ func (g *Game) HandleClientMessages(c *client) {
 			}
 
 		default:
-			slog.Warn("Unknown", "client", c.id, "message", f.String())
+			slog.Warn(c.Label(), "id", c.id, "name", c.name, "unknown", f.String(), "payload", raw)
 		}
 
 	}
 }
 
-func (g *Game) HandleSendMessages() {
+func (g *Game) handleSendMessages() {
 	for message := range g.boxMessageChan {
 		for _, c := range g.clients {
 			if c == nil || c.id == message.clientID {
@@ -233,7 +231,7 @@ func (g *Game) HandleSendMessages() {
 
 			if c.conn == nil {
 				slog.Warn("Client connection is nil, skipping", "clientID", c.id)
-				go g.DisconnectClient(c)
+				go g.disconnectClient(c)
 				continue
 			}
 
@@ -241,7 +239,7 @@ func (g *Game) HandleSendMessages() {
 			if err != nil {
 				slog.Error("Error writing to client connection", "clientID", c.id, "error", err)
 
-				go g.DisconnectClient(c)
+				go g.disconnectClient(c)
 				continue
 			}
 
@@ -250,8 +248,8 @@ func (g *Game) HandleSendMessages() {
 	}
 }
 
-func (g *Game) DisconnectClient(c *client) {
-	slog.Debug("Disconnecting client", "clientID", c.id, "address", c.conn.RemoteAddr().String())
+func (g *Game) disconnectClient(c *client) {
+	slog.Info(c.Label()+" disconnected", "id", c.id, "name", c.name, "address", c.conn.RemoteAddr().String())
 	binary, err := c.DisconnectFrame()
 	if err == nil {
 		g.boxMessageChan <- dataMessage{

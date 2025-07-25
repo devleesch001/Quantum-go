@@ -37,7 +37,7 @@ func (c *ClientPosition) Code() Code {
 }
 
 func (c ClientPosition) String() string {
-	return fmt.Sprintf("Pos: %d, %d", c.x, c.y)
+	return fmt.Sprintf("%d, %d", c.x, c.y)
 }
 
 func (c *ClientPosition) X() uint8 {

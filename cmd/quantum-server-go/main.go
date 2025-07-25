@@ -9,8 +9,6 @@ import (
 	"net"
 )
 
-var flagPort int
-
 func main() {
 	debugFlag := flag.Bool("debug", false, "Activer le mode debug")
 	serverFlag := flag.Bool("server", false, "Présence du flag serveur")

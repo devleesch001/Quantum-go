@@ -18,6 +18,10 @@ type client struct {
 	conn   net.Conn
 }
 
+func (c *client) Label() string {
+	return fmt.Sprintf("[Client %d]", c.id)
+}
+
 func (c *client) String() string {
 	return fmt.Sprintf(
 		"color: %d, x: %d, y: %d, faceID: %d, bodyID: %d, legsID: %d, conn: %s",
