@@ -8,6 +8,8 @@ on:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
+  release:
+    types: [published]
 
 jobs:
 
@@ -26,3 +28,32 @@ jobs:
 
       - name: Test
         run: go test -v ./...
+
+  release:
+    if: github.event_name == 'release'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write  # ⚠️ nécessaire pour publier les assets
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.23'
+
+      - name: Build binaries
+        run: |
+          mkdir bin
+          GOOS=linux GOARCH=amd64 go build -o bin/quantum-linux-amd64 ./cmd/quantum-go
+          GOOS=darwin GOARCH=arm64 go build -o bin/quantum-darwin-arm64 ./cmd/quantum-go
+          GOOS=windows GOARCH=amd64 go build -o bin/quantum-win-amd64.exe ./cmd/quantum-go
+
+      - name: Upload release assets
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            bin/quantum-linux-amd64
+            bin/quantum-darwin-arm64
+            bin/quantum-win-amd64.exe
