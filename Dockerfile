@@ -17,7 +17,7 @@ COPY . .
 
 #RUN go run github.com/google/go-licenses@latest report --template licenses.tpl --include_tests . 2>/dev/null > files/statics/licenses.json
 
-RUN go build -v -o bin/quantum-go -ldflags="-s -w" cmd/main.go
+RUN go build -v -o bin/quantum-go -ldflags="-s -w" cmd/quantum-go/main.go
 RUN go build -v -o bin/quantum-server-go -ldflags="-s -w" cmd/quantum-server-go/main.go
 RUN go build -v -o bin/quantum-client-go -ldflags="-s -w" cmd/quantum-client-go/main.go
 
