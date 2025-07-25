@@ -10,13 +10,23 @@ import (
 	"net"
 )
 
+const (
+	MaxClients = 128 // Maximum number of clients allowed
+)
+
 // Game represents the game server, managing clients and maps.
 type Game struct {
-	clientCount    uint8
-	clients        []*client
+	clients        [MaxClients]*client
 	maps           maps.Maps
 	serverLn       net.Listener
 	boxMessageChan chan dataMessage
+}
+
+func New() *Game {
+	return &Game{
+		clients:        [MaxClients]*client{},
+		boxMessageChan: make(chan dataMessage, 100),
+	}
 }
 
 // Close closes the server listener, stopping the game server.
@@ -37,16 +47,34 @@ func (g *Game) handleConnection() {
 	}
 }
 
+func (g *Game) findFreeSlot() (uint8, error) {
+	for i := 1; i < MaxClients; i++ {
+		if g.clients[i] == nil {
+			return uint8(i), nil
+		}
+	}
+	return 0, errors.New("no free slots available")
+}
+
 // addClient creates a new client instance and starts handling its messages.
 func (g *Game) addClient(conn net.Conn) {
 	slog.Info("New connection established", "address", conn.RemoteAddr().String())
 
-	g.clientCount++
+	slotID, err := g.findFreeSlot()
+	if err != nil {
+		slog.Error("No free slots available for new client", "error", err)
+		_ = conn.Close()
+		return
+	}
 
-	c := newClient(g.clientCount, conn)
+	c := newClient(slotID, conn)
 
 	for _, existingClient := range g.clients {
-		frame, err := frames.New(c.id, frames.NewClientInfo(
+		if existingClient == nil {
+			continue
+		}
+
+		frame, err := frames.New(existingClient.id, frames.NewClientInfo(
 			existingClient.color,
 			existingClient.x,
 			existingClient.y,
@@ -64,7 +92,7 @@ func (g *Game) addClient(conn net.Conn) {
 		_, _ = conn.Write(frame)
 	}
 
-	g.clients = append(g.clients, c)
+	g.clients[c.id] = c
 
 	go g.HandleClientMessages(c)
 }
@@ -120,16 +148,7 @@ func (g *Game) HandleClientMessages(c *client) {
 				slog.Error("Error reading from connection", "clientID", c.id, "address", c.conn.RemoteAddr().String(), "error", err)
 			}
 
-			newResponse, err := frames.New(c.id, frames.NewClientInfo(c.color, c.x, c.y, c.faceID, c.bodyID, c.legsID, c.name, false)).MarshalBinary()
-
-			if err == nil {
-				g.boxMessageChan <- dataMessage{
-					clientID: c.id,
-					data:     newResponse,
-				}
-
-			}
-
+			g.DisconnectClient(c)
 			c.conn.Close()
 			return
 		}
@@ -145,9 +164,7 @@ func (g *Game) HandleClientMessages(c *client) {
 			continue
 		}
 
-		slog.Debug("Received message", "message", f.String(), "from", c.conn.RemoteAddr().String())
-		slog.Debug(fmt.Sprintf("%x", raw))
-
+		slog.Debug("Received", "message", f.String(), "from", c.conn.RemoteAddr().String(), "raw", fmt.Sprintf("%x", raw))
 		switch payload := f.IPayload.(type) {
 		case *frames.ClientHello:
 			slog.Info("Client Hello", "client", payload.String())
@@ -171,7 +188,7 @@ func (g *Game) HandleClientMessages(c *client) {
 			}
 
 		case *frames.ClientPosition:
-			slog.Info("Client Position", "position", payload.String())
+			slog.Info("Client Position", "client", c.id, "position", payload.String())
 
 			c.x = payload.X()
 			c.y = payload.Y()
@@ -187,7 +204,7 @@ func (g *Game) HandleClientMessages(c *client) {
 			}
 
 		case *frames.ClientMessage:
-			slog.Info("Client Message", "message", payload.String())
+			slog.Info("Client Message", "client", c.id, "message", payload.String())
 
 			frame, err := frames.New(c.id, payload).MarshalBinary()
 			if err != nil {
@@ -200,7 +217,7 @@ func (g *Game) HandleClientMessages(c *client) {
 			}
 
 		default:
-			slog.Warn("Unknown", "message", f.String())
+			slog.Warn("Unknown", "client", c.id, "message", f.String())
 		}
 
 	}
@@ -209,22 +226,38 @@ func (g *Game) HandleClientMessages(c *client) {
 func (g *Game) HandleSendMessages() {
 	for message := range g.boxMessageChan {
 		for _, c := range g.clients {
-			if c.id == message.clientID {
-				slog.Debug("Skipping sending message to self", "clientID", c.id)
+			if c == nil || c.id == message.clientID {
 				continue
 			}
 
 			if c.conn == nil {
 				slog.Warn("Client connection is nil, skipping", "clientID", c.id)
+				go g.DisconnectClient(c)
 				continue
 			}
 
 			write, err := c.conn.Write(message.data)
 			if err != nil {
 				slog.Error("Error writing to client connection", "clientID", c.id, "error", err)
+
+				go g.DisconnectClient(c)
 				continue
 			}
-			slog.Debug("Message sent to client", "clientID", c.id, "bytesWritten", write)
+
+			slog.Debug("Message sent to client", "clientID", c.id, "bytesWritten", write, "data", fmt.Sprintf("%x", message.data))
 		}
 	}
+}
+
+func (g *Game) DisconnectClient(c *client) {
+	slog.Debug("Disconnecting client", "clientID", c.id, "address", c.conn.RemoteAddr().String())
+	binary, err := c.DisconnectFrame()
+	if err == nil {
+		g.boxMessageChan <- dataMessage{
+			clientID: c.id,
+			data:     binary,
+		}
+	}
+
+	g.clients[c.id] = nil
 }

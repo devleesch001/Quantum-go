@@ -2,6 +2,7 @@ package game
 
 import (
 	"fmt"
+	"github.com/devleesch001/Quantum-go/frames"
 	"net"
 )
 
@@ -22,6 +23,10 @@ func (c *client) String() string {
 		"color: %d, x: %d, y: %d, faceID: %d, bodyID: %d, legsID: %d, conn: %s",
 		c.color, c.x, c.y, c.faceID, c.bodyID, c.legsID, c.conn.RemoteAddr().String(),
 	)
+}
+
+func (c *client) DisconnectFrame() ([]byte, error) {
+	return frames.New(c.id, frames.NewClientInfo(c.x, c.y, c.color, c.faceID, c.bodyID, c.legsID, c.name, false)).MarshalBinary()
 }
 
 func newClient(id uint8, conn net.Conn) *client {
