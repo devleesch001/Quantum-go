@@ -1,4 +1,4 @@
-name: Build & Push Docker Images
+name: Docker Images
 
 on:
   push:
@@ -12,6 +12,9 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4

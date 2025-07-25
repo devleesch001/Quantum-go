@@ -31,7 +31,7 @@ func (m *ClientHello) UnmarshalBinary(data []byte) error {
 
 func (m *ClientHello) MarshalBinary() ([]byte, error) {
 	var buf = make([]byte, 0, 9+len(m.name))
-	buf = append(buf, 0x00, 0x00)
+	buf = append(buf, 0x00)
 	buf = append(buf, m.color)
 	buf = append(buf, m.x)
 	buf = append(buf, m.y)

@@ -41,7 +41,7 @@ COPY --from=builder /etc/ssl/certs/ /etc/ssl/certs/
 
 CMD ["quantum-go"]
 
-FROM scratch AS quantum-go-server
+FROM scratch AS quantum-server-go
 
 WORKDIR /usr/local/bin
 
