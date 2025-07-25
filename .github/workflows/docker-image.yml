@@ -46,7 +46,7 @@ jobs:
         with:
           context: .
           file: ./Dockerfile
-          target: quantum-go-server
+          target: quantum-server-go
           push: true
           labels: ${{ steps.meta.outputs.labels }}
           tags: |
