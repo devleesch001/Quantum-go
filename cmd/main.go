@@ -2,17 +2,14 @@ package main
 
 import (
 	"flag"
-	"fmt"
+	"github.com/devleesch001/Quantum-go/game/client"
 	"github.com/devleesch001/Quantum-go/game/server"
 	"github.com/devleesch001/Quantum-go/tools"
 	"log/slog"
 	"net"
 )
 
-var flagPort int
-
 func main() {
-
 	address := ""
 	debugFlag := flag.Bool("debug", false, "Activer le mode debug")
 	serverFlag := flag.Bool("server", false, "Présence du flag serveur")
@@ -38,7 +35,21 @@ func main() {
 		}
 
 		server.Run(net.JoinHostPort(host, port))
+	} else {
+		args := flag.Args()
+		if len(args) == 2 {
+			name := args[0]
+			address = args[1]
+
+			host, port, err := tools.ParseAddressWithDefault(address, "127.0.0.1", tools.DefaultPort)
+			if err != nil {
+				panic(err)
+			}
+
+			client.Run(net.JoinHostPort(host, port), name)
+
+			panic("Client not implemented yet")
+		}
 	}
 
-	fmt.Println("Usage: ./quantum -server <port> (default 18467)")
 }

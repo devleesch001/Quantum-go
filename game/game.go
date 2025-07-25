@@ -31,6 +31,9 @@ func New() *Game {
 
 // Close closes the server listener, stopping the game server.
 func (g *Game) Close() error {
+	if g.serverLn == nil {
+		return nil
+	}
 	return g.serverLn.Close()
 }
 
@@ -108,18 +111,16 @@ func (g *Game) initMap() error {
 	return nil
 }
 
-func (g *Game) Start(port uint16) error {
+func (g *Game) Start(addr string) error {
 	if err := g.initMap(); err != nil {
 		return err
 	}
 
-	var strAddr = fmt.Sprintf("0.0.0.0:%d", port)
-
-	ln, err := net.Listen("tcp", strAddr)
+	ln, err := net.Listen("tcp", addr)
 	if err != nil {
 		return fmt.Errorf("failed to start server: %w", err)
 	}
-	slog.Info("Server started on " + strAddr)
+	slog.Info("Server started on " + addr)
 
 	g.serverLn = ln
 	g.boxMessageChan = make(chan dataMessage, 100)
