@@ -26,3 +26,5 @@ ou
 make run
 ```
 WIP
+
+> tcell sera utilisé pour l'interface graphique

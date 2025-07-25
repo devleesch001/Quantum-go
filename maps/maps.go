@@ -11,7 +11,13 @@ type Maps struct {
 	h     uint
 }
 
-func (m *Maps) Init() error {
+func New() (*Maps, error) {
+	var m Maps
+
+	return &m, m.init()
+}
+
+func (m *Maps) init() error {
 	m.maps = DefaultMaps
 
 	for i := 0; i < len(m.maps); i++ {

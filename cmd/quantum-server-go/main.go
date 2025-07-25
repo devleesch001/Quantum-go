@@ -28,7 +28,7 @@ func main() {
 		if len(args) > 0 {
 			host, port, err = tools.ParseAddress(args[0])
 			if err != nil {
-				slog.Error("Impsible de parser l'addresse", "error", err)
+				slog.Error("Impossible de parser l'addresse", "error", err)
 				panic(err)
 			}
 		}
@@ -36,5 +36,5 @@ func main() {
 		server.Run(net.JoinHostPort(host, port))
 	}
 
-	fmt.Println("Usage: ./quantum -server <port> (default 18467)")
+	fmt.Println("Usage: quantum -server <port> (default 18467)")
 }

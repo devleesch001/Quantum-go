@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"github.com/devleesch001/Quantum-go/game/client"
 	"github.com/devleesch001/Quantum-go/game/server"
 	"github.com/devleesch001/Quantum-go/tools"
@@ -50,4 +51,5 @@ func main() {
 		}
 	}
 
+	fmt.Println("Usage: quantum <player_name> <server_ip> or quantum -server")
 }

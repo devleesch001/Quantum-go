@@ -31,9 +31,7 @@ func main() {
 		}
 
 		client.Run(net.JoinHostPort(host, port), name)
-
-		panic("Client not implemented yet")
 	}
 
-	fmt.Println("Usage: ./quantum -server <port> (default 18467)")
+	fmt.Println("Usage: quantum <player_name> <server_ip>")
 }
