@@ -39,7 +39,6 @@ jobs:
             ghcr.io/${{ github.repository }}:latest
             ghcr.io/${{ github.repository }}:quantum-go
             ghcr.io/${{ github.repository }}:${{ github.sha }}
-            ghcr.io/${{ github.repository }}:quantum-go-${{ github.sha }}
 
       - name: Build and push quantum-server-go
         uses: docker/build-push-action@v5
@@ -50,8 +49,8 @@ jobs:
           push: true
           labels: ${{ steps.meta.outputs.labels }}
           tags: |
-            ghcr.io/${{ github.repository }}:quantum-server-go
-            ghcr.io/${{ github.repository }}:quantum-server-go-${{ github.sha }}
+            ghcr.io/${{ github.repository }}:server
+            ghcr.io/${{ github.repository }}:server-${{ github.sha }}
 
       - name: Build and push quantum-client-go
         uses: docker/build-push-action@v5
@@ -62,5 +61,5 @@ jobs:
           push: true
           labels: ${{ steps.meta.outputs.labels }}
           tags: |
-            ghcr.io/${{ github.repository }}:quantum-client-go
-            ghcr.io/${{ github.repository }}:quantum-client-go-${{ github.sha }}
+            ghcr.io/${{ github.repository }}:client
+            ghcr.io/${{ github.repository }}:client-${{ github.sha }}
