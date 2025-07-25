@@ -27,6 +27,10 @@ RUN go build -v -o bin/quantum-client-go -ldflags="-s -w" cmd/quantum-client-go/
 #RUN apk add --no-cache git
 #RUN go install gotest.tools/gotestsum@latest
 
+FROM alpine:3.20.6 AS tzdata
+ENV DATE=20250512
+RUN apk add --no-cache tzdata
+
 FROM scratch AS quantum-go
 
 WORKDIR /usr/local/bin
@@ -46,10 +50,6 @@ COPY --from=builder /usr/src/app/bin/quantum-server-go /usr/local/bin/quantum-se
 COPY --from=builder /etc/ssl/certs/ /etc/ssl/certs/
 
 CMD ["quantum-server-go"]
-
-FROM alpine:3.20.6 AS tzdata
-ENV DATE=20250512
-RUN apk add --no-cache tzdata
 
 FROM scratch AS quantum-client-go
 
