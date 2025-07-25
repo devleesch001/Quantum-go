@@ -1,0 +1,266 @@
+- semver: 0.0.1
+  date: 2025-07-25T21:43:51+02:00
+  packager: Alexis DEVLEESCHAUWER
+  changes:
+    - commit: 359c3b814c9515194eb6bef616f5ed62860a4743
+      note: rename docker tag
+      author:
+        name: Alexis DEVLEESCHAUWER
+        email: alexis@devleeschauwer.fr
+      committer:
+        name: Alexis DEVLEESCHAUWER
+        email: alexis@devleeschauwer.fr
+      conventional_commit:
+        category: chore
+        scope: ""
+        description: rename docker tag
+        body: ""
+        footer: []
+        major: false
+        minor: false
+        patch: false
+    - commit: d7b408990d551c9d873907a4471c864392d91453
+      note: 'fix: Workflows Name'
+      author:
+        name: Alexis DEVLEESCHAUWER
+        email: alexis@devleeschauwer.fr
+      committer:
+        name: Alexis DEVLEESCHAUWER
+        email: alexis@devleeschauwer.fr
+      conventional_commit:
+        category: fix
+        scope: ""
+        description: Workflows Name
+        body: ""
+        footer: []
+        major: false
+        minor: false
+        patch: true
+    - commit: 72f855de84fff81ef76ad1ccab5b96d2ee08d42c
+      note: 'fix: Makefile'
+      author:
+        name: Alexis DEVLEESCHAUWER
+        email: alexis@devleeschauwer.fr
+      committer:
+        name: Alexis DEVLEESCHAUWER
+        email: alexis@devleeschauwer.fr
+      conventional_commit:
+        category: fix
+        scope: ""
+        description: Makefile
+        body: ""
+        footer: []
+        major: false
+        minor: false
+        patch: true
+    - commit: a157aec9375b48a48e6098b0587c8b3ac829035a
+      note: 'fix: docker name, add permissions in workflows, fix unit test'
+      author:
+        name: Alexis DEVLEESCHAUWER
+        email: alexis@devleeschauwer.fr
+      committer:
+        name: Alexis DEVLEESCHAUWER
+        email: alexis@devleeschauwer.fr
+      conventional_commit:
+        category: fix
+        scope: ""
+        description: docker name, add permissions in workflows, fix unit test
+        body: ""
+        footer: []
+        major: false
+        minor: false
+        patch: true
+    - commit: 7037d99f65b3306dfb1949d0d216f533e3132dd1
+      note: 'fix: docker build order'
+      author:
+        name: Alexis DEVLEESCHAUWER
+        email: alexis@devleeschauwer.fr
+      committer:
+        name: Alexis DEVLEESCHAUWER
+        email: alexis@devleeschauwer.fr
+      conventional_commit:
+        category: fix
+        scope: ""
+        description: docker build order
+        body: ""
+        footer: []
+        major: false
+        minor: false
+        patch: true
+    - commit: d044769aae4f1084d6edf870c03ece7e5a21a618
+      note: |-
+        feat(game/client): ajout de la structure client et méthodes associées
+        Création de la structure client avec gestion des attributs (id, nom, couleur, position, apparence, connexion réseau)
+        Ajout des méthodes Label, String, DisconnectFrame pour l'affichage et la gestion de la déconnexion
+        Implémentation de la fonction newClient pour instancier un nouveau client
+      author:
+        name: Alexis DEVLEESCHAUWER
+        email: alexis@devleeschauwer.fr
+      committer:
+        name: Alexis DEVLEESCHAUWER
+        email: alexis@devleeschauwer.fr
+      conventional_commit:
+        category: feat
+        scope: game/client
+        description: ajout de la structure client et méthodes associées
+        body: |-
+            Création de la structure client avec gestion des attributs (id, nom, couleur, position, apparence, connexion réseau)
+            Ajout des méthodes Label, String, DisconnectFrame pour l'affichage et la gestion de la déconnexion
+            Implémentation de la fonction newClient pour instancier un nouveau client
+        footer: []
+        major: false
+        minor: true
+        patch: false
+    - commit: 671054236772965f77613322b42284cc1c82d6c2
+      note: Add GitHub Actions workflows for Go project build and Docker image deployment
+      author:
+        name: Alexis DEVLEESCHAUWER
+        email: alexis@devleeschauwer.fr
+      committer:
+        name: Alexis DEVLEESCHAUWER
+        email: alexis@devleeschauwer.fr
+      conventional_commit:
+        category: chore
+        scope: ""
+        description: Add GitHub Actions workflows for Go project build and Docker image deployment
+        body: ""
+        footer: []
+        major: false
+        minor: false
+        patch: false
+    - commit: 87042c3411e01b959662dbeaa2ed14aa43fed14d
+      note: Add Dockerfile for multi-stage build of quantum applications
+      author:
+        name: Alexis DEVLEESCHAUWER
+        email: alexis@devleeschauwer.fr
+      committer:
+        name: Alexis DEVLEESCHAUWER
+        email: alexis@devleeschauwer.fr
+      conventional_commit:
+        category: chore
+        scope: ""
+        description: Add Dockerfile for multi-stage build of quantum applications
+        body: ""
+        footer: []
+        major: false
+        minor: false
+        patch: false
+    - commit: 09b703395790cbf475a14c940ae6b5690fe0772e
+      note: Refactor address handling in main.go; simplify server argument parsing
+      author:
+        name: Alexis DEVLEESCHAUWER
+        email: alexis@devleeschauwer.fr
+      committer:
+        name: Alexis DEVLEESCHAUWER
+        email: alexis@devleeschauwer.fr
+      conventional_commit:
+        category: chore
+        scope: ""
+        description: Refactor address handling in main.go; simplify server argument parsing
+        body: ""
+        footer: []
+        major: false
+        minor: false
+        patch: false
+    - commit: ae45f063decbba7bc24bc4f16f54f18075336297
+      note: Refactor server and client handling; add address parsing utility
+      author:
+        name: Alexis DEVLEESCHAUWER
+        email: alexis@devleeschauwer.fr
+      committer:
+        name: Alexis DEVLEESCHAUWER
+        email: alexis@devleeschauwer.fr
+      conventional_commit:
+        category: chore
+        scope: ""
+        description: Refactor server and client handling; add address parsing utility
+        body: ""
+        footer: []
+        major: false
+        minor: false
+        patch: false
+    - commit: d19303e001be8d32e4c7c2c67560880df7ba78d1
+      note: Refactor main.go to simplify blocking behavior in select statement
+      author:
+        name: Alexis DEVLEESCHAUWER
+        email: alexis@devleeschauwer.fr
+      committer:
+        name: Alexis DEVLEESCHAUWER
+        email: alexis@devleeschauwer.fr
+      conventional_commit:
+        category: chore
+        scope: ""
+        description: Refactor main.go to simplify blocking behavior in select statement
+        body: ""
+        footer: []
+        major: false
+        minor: false
+        patch: false
+    - commit: 1364aac2c42d0ada0af0ca71243d9511212d5b91
+      note: Implement client disconnection handling and manage client slots
+      author:
+        name: Alexis DEVLEESCHAUWER
+        email: alexis@devleeschauwer.fr
+      committer:
+        name: Alexis DEVLEESCHAUWER
+        email: alexis@devleeschauwer.fr
+      conventional_commit:
+        category: chore
+        scope: ""
+        description: Implement client disconnection handling and manage client slots
+        body: ""
+        footer: []
+        major: false
+        minor: false
+        patch: false
+    - commit: e6b75149c185ad8df89fcb1d587c2ee71c87298a
+      note: Update module path and import statements to reflect new repository structure
+      author:
+        name: Alexis DEVLEESCHAUWER
+        email: alexis@devleeschauwer.fr
+      committer:
+        name: Alexis DEVLEESCHAUWER
+        email: alexis@devleeschauwer.fr
+      conventional_commit:
+        category: chore
+        scope: ""
+        description: Update module path and import statements to reflect new repository structure
+        body: ""
+        footer: []
+        major: false
+        minor: false
+        patch: false
+    - commit: 5b1e80cb2e572020aa7faf9167d36e01fa86a271
+      note: Add Makefile
+      author:
+        name: Alexis DEVLEESCHAUWER
+        email: alexis@devleeschauwer.fr
+      committer:
+        name: Alexis DEVLEESCHAUWER
+        email: alexis@devleeschauwer.fr
+      conventional_commit:
+        category: chore
+        scope: ""
+        description: Add Makefile
+        body: ""
+        footer: []
+        major: false
+        minor: false
+        patch: false
+    - commit: 6d14be20558a5f5d7c48fd6690259d5dd8da7581
+      note: Initial commit
+      author:
+        name: Alexis DEVLEESCHAUWER
+        email: alexis@devleeschauwer.fr
+      committer:
+        name: Alexis DEVLEESCHAUWER
+        email: alexis@devleeschauwer.fr
+      conventional_commit:
+        category: chore
+        scope: ""
+        description: Initial commit
+        body: ""
+        footer: []
+        major: false
+        minor: false
+        patch: false

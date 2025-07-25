@@ -4,7 +4,15 @@ Implementation de [quantum](https://github.com/Leizar06001/Quantum) en Go.
 
 Serveur uniquemennt
 
-WIP
+## Tools
+
+### nfpm
+
+`go install github.com/goreleaser/nfpm/v2/cmd/nfpm@latest`
+
+### chglog
+
+`go install github.com/goreleaser/chglog/cmd/chglog@latest`
 
 ## How to run
 
@@ -12,8 +20,9 @@ WIP
 go run /cmd/main.go
 ```
 
-ou 
+ou
 
 ```bash
 make run
 ```
+WIP

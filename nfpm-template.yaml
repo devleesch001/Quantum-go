@@ -1,0 +1,20 @@
+# nfpm example configuration file
+#
+# check https://nfpm.goreleaser.com/configuration for detailed usage
+#
+name: "quantum-go"
+platform: "linux"
+arch: ${GOARCH}
+version: ${SEMVER}
+version_metadata: git
+section: "utils"
+priority: "extra"
+maintainer: "Alexis DEVLEESCHAUWER <alexis@devleeschauwer.fr>"
+description: |
+  Quantum implementation in Go.
+vendor: "Alexis DEVLEESCHAUWER"
+license: "AGPL-3.0"
+changelog: "changelog.yml"
+contents:
+  - src: ./build/linux/${GOARCH}/quantum-go
+    dst: /usr/bin/quantum-go

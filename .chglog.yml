@@ -1,0 +1,5 @@
+package-name: "quantum-go"
+debug: false
+exclude-merge-commits: true
+conventional-commits: true
+owner: "Alexis DEVLEESCHAUWER"
