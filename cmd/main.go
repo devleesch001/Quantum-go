@@ -21,17 +21,17 @@ func main() {
 
 	if *serverFlag {
 		// Regarder dans flag.Args() s'il y a un argument après le flag -server
+		var host = "0.0.0.0"
+		var port = "18467"
+		var err error
+
 		args := flag.Args()
 		if len(args) > 0 {
-			address = args[0]
-		} else {
-			address = "0.0.0.0:18467"
-		}
-
-		host, port, err := tools.ParseAddress(address)
-		if err != nil {
-			slog.Error("Impsible de parser l'addresse", "error", err)
-			panic(err)
+			host, port, err = tools.ParseAddress(args[0])
+			if err != nil {
+				slog.Error("Impsible de parser l'addresse", "error", err)
+				panic(err)
+			}
 		}
 
 		server.Run(net.JoinHostPort(host, port))
@@ -47,8 +47,6 @@ func main() {
 			}
 
 			client.Run(net.JoinHostPort(host, port), name)
-
-			panic("Client not implemented yet")
 		}
 	}
 
