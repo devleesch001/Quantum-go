@@ -4,10 +4,10 @@ APP_NAME := quantum-go
 
 build:
 	@mkdir -p bin
-	go build -o bin/$(APP_NAME) ./cmd/main.go
+	go build -v -o bin/$(APP_NAME) ./...
 
 run:
-	go run ./cmd/$(APP_NAME)
+	go run ./cmd/main.go
 
 clean:
 	rm -rf bin/
