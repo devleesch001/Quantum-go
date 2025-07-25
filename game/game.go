@@ -1,10 +1,10 @@
 package game
 
 import (
-	"Quantum-go/frames"
-	"Quantum-go/maps"
 	"errors"
 	"fmt"
+	"github.com/devleesch001/Quantum-go/frames"
+	"github.com/devleesch001/Quantum-go/maps"
 	"io"
 	"log/slog"
 	"net"

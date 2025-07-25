@@ -1,3 +1,3 @@
-module Quantum-go
+module github.com/devleesch001/Quantum-go
 
-go 1.24
+go 1.23

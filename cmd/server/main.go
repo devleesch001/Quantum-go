@@ -1,9 +1,9 @@
 package main
 
 import (
-	"Quantum-go/game"
 	"flag"
 	"fmt"
+	"github.com/devleesch001/Quantum-go/game"
 	"log/slog"
 )
 
