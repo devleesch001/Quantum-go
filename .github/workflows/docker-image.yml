@@ -1,0 +1,62 @@
+name: Build & Push Docker Images
+
+on:
+  push:
+    branches: [ main ]
+    tags: [ 'v*' ] # tag style: v1.0.0
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push quantum-go
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          target: quantum-go
+          push: true
+          labels: ${{ steps.meta.outputs.labels }}
+          tags: |
+            ghcr.io/${{ github.repository }}:latest
+            ghcr.io/${{ github.repository }}:quantum-go
+            ghcr.io/${{ github.repository }}:${{ github.sha }}
+            ghcr.io/${{ github.repository }}:quantum-go-${{ github.sha }}
+
+      - name: Build and push quantum-server-go
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          target: quantum-go-server
+          push: true
+          labels: ${{ steps.meta.outputs.labels }}
+          tags: |
+            ghcr.io/${{ github.repository }}:quantum-server-go
+            ghcr.io/${{ github.repository }}:quantum-server-go-${{ github.sha }}
+
+      - name: Build and push quantum-client-go
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          target: quantum-client-go
+          push: true
+          labels: ${{ steps.meta.outputs.labels }}
+          tags: |
+            ghcr.io/${{ github.repository }}:quantum-client-go
+            ghcr.io/${{ github.repository }}:quantum-client-go-${{ github.sha }}
